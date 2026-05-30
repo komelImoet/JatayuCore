@@ -1,0 +1,16 @@
+[Unit]
+Description=JatayuCore - Multi-Agent AI Trading
+Documentation=https://komelimoet.github.io/JatayuCore
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/TradingAgents
+ExecStart=/root/TradingAgents/.venv/bin/python main.py schedule --tickers AAPL,NVDA,MSFT
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

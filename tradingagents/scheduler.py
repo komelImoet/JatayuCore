@@ -96,7 +96,7 @@ class TradingScheduler:
         self._running = True
 
         self.monitor.start()
-        self.notifier.send_health("Scheduler started")
+        self.notifier.send_info("JatayuCore", "Scheduler started")
 
         logger.info(
             "Scheduler started: daily at %02d:%02d UTC for %s",
@@ -114,5 +114,5 @@ class TradingScheduler:
     def stop(self) -> None:
         self._running = False
         self.monitor.stop()
-        self.notifier.send_health("Scheduler stopped")
+        self.notifier.send_info("JatayuCore", "Scheduler stopped")
         logger.info("Scheduler stopped")
