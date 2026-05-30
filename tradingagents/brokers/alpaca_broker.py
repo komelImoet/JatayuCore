@@ -11,6 +11,9 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
+RATING_ACTION = {"Buy": OrderSide.BUY, "Overweight": OrderSide.BUY}
+EXECUTABLE_RATINGS = frozenset(RATING_ACTION.keys())
+
 
 def _parse_field(text: str, field: str) -> str | None:
     import re
@@ -22,8 +25,12 @@ def _parse_field(text: str, field: str) -> str | None:
     return m.group(1).strip() if m else None
 
 
-RATING_ACTION = {"Buy": OrderSide.BUY, "Overweight": OrderSide.BUY}
-EXECUTABLE_RATINGS = frozenset(RATING_ACTION.keys())
+def _parse_qty(raw: str) -> int | None:
+    """Extract integer quantity from strings like '5%', '10 shares', '2'."""
+    import re
+    raw = raw.strip().lower().replace(",", "")
+    m = re.search(r"\d+", raw)
+    return int(m.group()) if m else None
 
 
 class AlpacaBroker:
@@ -38,10 +45,12 @@ class AlpacaBroker:
         api_key: str | None = None,
         secret_key: str | None = None,
         paper: bool = True,
+        notifier=None,
     ):
         self.api_key = api_key or os.getenv("ALPACA_API_KEY", "")
         self.secret_key = secret_key or os.getenv("ALPACA_SECRET_KEY", "")
         self.paper = paper
+        self.notifier = notifier
 
         if not self.api_key or not self.secret_key:
             logger.warning("ALPACA_API_KEY or ALPACA_SECRET_KEY not set — broker disabled")
@@ -78,15 +87,12 @@ class AlpacaBroker:
             return False
 
         ticker = state.get("company_of_interest", "")
-        trade_date = state.get("trade_date", "")
         final_text = state.get("final_trade_decision", "")
         trader_text = state.get("trader_investment_decision", "")
 
         rating = (_parse_field(final_text, "Rating") or "Hold").strip()
         if rating not in EXECUTABLE_RATINGS:
-            logger.info(
-                "Alpaca: %s rating %s → no action", ticker, rating
-            )
+            logger.info("Alpaca: %s rating %s → no action", ticker, rating)
             return False
 
         sizing_raw = _parse_field(trader_text, "Position Sizing") or ""
@@ -94,6 +100,8 @@ class AlpacaBroker:
 
         if qty is None:
             logger.warning("Alpaca: could not parse qty from '%s'", sizing_raw)
+            if self.notifier:
+                self.notifier.send_error(ticker, f"Cannot parse qty: {sizing_raw}")
             return False
 
         side = RATING_ACTION[rating]
@@ -108,6 +116,16 @@ class AlpacaBroker:
                 time_in_force=TimeInForce.DAY,
             )
             order = self.client.submit_order(order_req)
+            msg = (
+                f"<b>Alpaca Order Placed</b>\n"
+                f"━━━━━━━━━━━━━━━━━━\n"
+                f"{'🟢' if side == OrderSide.BUY else '🔴'} <b>Side:</b> {side.name}\n"
+                f"<b>Ticker:</b> {ticker}\n"
+                f"<b>Qty:</b> {qty}\n"
+                f"<b>Order:</b> #{order.id}"
+            )
+            if self.notifier:
+                self.notifier._send(msg)
             logger.info(
                 "Alpaca: %s %d × %s → order #%s",
                 side.name, qty, ticker, order.id,
@@ -115,18 +133,6 @@ class AlpacaBroker:
             return True
         except Exception as e:
             logger.error("Alpaca order failed for %s: %s", ticker, e)
+            if self.notifier:
+                self.notifier.send_error(ticker, f"Order failed: {e}")
             return False
-
-
-def _parse_qty(raw: str) -> int | None:
-    """Extract integer quantity from strings like '5%', '10 shares', '2'."""
-    import re
-    raw = raw.strip().lower().replace(",", "")
-
-    if "%" in raw:
-        return None
-
-    m = re.search(r"\d+", raw)
-    if m:
-        return int(m.group())
-    return None

@@ -28,7 +28,7 @@ class TradingScheduler:
         self.run_timezone = run_timezone
 
         self.notifier = TelegramNotifier()
-        self.broker = AlpacaBroker()
+        self.broker = AlpacaBroker(notifier=self.notifier if self.notifier.enabled else None)
         self.last_run_date = None
         self._running = False
 

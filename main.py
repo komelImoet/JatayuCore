@@ -30,7 +30,7 @@ def build_config() -> dict:
 def cmd_run(args: argparse.Namespace) -> None:
     config = build_config()
     notifier = TelegramNotifier()
-    broker = AlpacaBroker()
+    broker = AlpacaBroker(notifier=notifier if notifier.enabled else None)
     notifiers: list = []
     if notifier.enabled:
         notifiers.append(notifier)
