@@ -4,6 +4,7 @@ import time
 from datetime import datetime, timezone
 from typing import Optional
 
+from tradingagents.brokers.alpaca_broker import AlpacaBroker
 from tradingagents.graph.trading_graph import TradingAgentsGraph
 from tradingagents.notifiers.telegram_notifier import TelegramNotifier
 from tradingagents.default_config import DEFAULT_CONFIG
@@ -27,6 +28,7 @@ class TradingScheduler:
         self.run_timezone = run_timezone
 
         self.notifier = TelegramNotifier()
+        self.broker = AlpacaBroker()
         self.last_run_date = None
         self._running = False
 
@@ -50,10 +52,16 @@ class TradingScheduler:
             try:
                 logger.info("Running JatayuCore for %s on %s", ticker, today_str)
 
+                notifiers = []
+                if self.notifier.enabled:
+                    notifiers.append(self.notifier)
+                if self.broker.enabled:
+                    notifiers.append(self.broker)
+
                 ta = TradingAgentsGraph(
                     debug=False,
                     config=self.config,
-                    notifiers=[self.notifier] if self.notifier.enabled else [],
+                    notifiers=notifiers,
                 )
                 final_state, signal = ta.propagate(ticker, today_str)
 

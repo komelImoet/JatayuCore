@@ -3,6 +3,7 @@ import sys
 
 from dotenv import load_dotenv
 
+from tradingagents.brokers.alpaca_broker import AlpacaBroker
 from tradingagents.default_config import DEFAULT_CONFIG
 from tradingagents.graph.trading_graph import TradingAgentsGraph as JatayuCoreGraph
 from tradingagents.notifiers.telegram_notifier import TelegramNotifier
@@ -29,7 +30,12 @@ def build_config() -> dict:
 def cmd_run(args: argparse.Namespace) -> None:
     config = build_config()
     notifier = TelegramNotifier()
-    notifiers = [notifier] if notifier.enabled else []
+    broker = AlpacaBroker()
+    notifiers: list = []
+    if notifier.enabled:
+        notifiers.append(notifier)
+    if broker.enabled:
+        notifiers.append(broker)
 
     ta = JatayuCoreGraph(
         debug=not args.quiet,
