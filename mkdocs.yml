@@ -42,6 +42,7 @@ nav:
     - MT5 Execution Engine: mt5-engine.md
   - Deployment:
     - Docker: docker.md
+    - Windows 10: windows-deploy.md
   - Future Improvements: future-improvements.md
   - Contributing: contributing.md
 
