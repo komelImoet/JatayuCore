@@ -41,6 +41,7 @@ nav:
     - MT5 Execution Engine: mt5-engine.md
   - Deployment:
     - Docker: docker.md
+  - Future Improvements: future-improvements.md
   - Contributing: contributing.md
 
 markdown_extensions:
