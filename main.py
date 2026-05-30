@@ -13,8 +13,9 @@ load_dotenv()
 
 def build_config() -> dict:
     config = DEFAULT_CONFIG.copy()
-    config["deep_think_llm"] = "gpt-5.4-mini"
-    config["quick_think_llm"] = "gpt-5.4-mini"
+    config["llm_provider"] = "deepseek"
+    config["deep_think_llm"] = "deepseek-chat"
+    config["quick_think_llm"] = "deepseek-chat"
     config["max_debate_rounds"] = 1
     config["data_vendors"] = {
         "core_stock_apis": "yfinance",
