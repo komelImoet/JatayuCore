@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 
 from dotenv import load_dotenv
@@ -48,7 +49,27 @@ def cmd_run(args: argparse.Namespace) -> None:
     print(signal)
 
 
+def _daemonize():
+    pid = os.fork()
+    if pid > 0:
+        sys.exit(0)
+    os.setsid()
+    pid = os.fork()
+    if pid > 0:
+        sys.exit(0)
+    sys.stdout.flush()
+    sys.stderr.flush()
+    with open("/dev/null", "r") as f:
+        os.dup2(f.fileno(), sys.stdin.fileno())
+    with open("/dev/null", "w") as f:
+        os.dup2(f.fileno(), sys.stdout.fileno())
+        os.dup2(f.fileno(), sys.stderr.fileno())
+
+
 def cmd_scheduler(args: argparse.Namespace) -> None:
+    if args.daemon:
+        _daemonize()
+
     config = build_config()
     tickers = args.tickers.split(",") if args.tickers else ["NVDA", "AAPL", "SPY"]
 
@@ -77,6 +98,7 @@ def main() -> None:
     sched_p.add_argument("--tickers", "-t", help="Comma-separated tickers")
     sched_p.add_argument("--hour", type=int, default=8, help="Run hour (UTC)")
     sched_p.add_argument("--minute", type=int, default=0, help="Run minute (UTC)")
+    sched_p.add_argument("--daemon", "-D", action="store_true", help="Fork to background")
     sched_p.set_defaults(func=cmd_scheduler)
 
     args = parser.parse_args()
