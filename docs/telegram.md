@@ -2,11 +2,36 @@
 
 TradingAgents sends real-time Telegram notifications at every stage of the trading pipeline.
 
+## How Notifications Flow
+
+```mermaid
+flowchart TB
+    subgraph PythonLayer["🐍 TradingAgents (Python)"]
+        A[Analysis Complete] -->|send_decision| TG1[📱 Analysis Signal]
+        E[Error Occurs] -->|send_error| TG2[📱 Error Alert]
+    end
+    
+    subgraph RustLayer["🦀 Execution Engine (Rust)"]
+        D[Decision Received] -->|send_decision| TG3[📱 Decision Card]
+        RK[Risk Check] -->|send_risk_decision| TG4{Approved?}
+        TG4 -->|Yes| TG5[📱 ✅ Risk PASSED]
+        TG4 -->|No| TG6[📱 ❌ Risk REJECTED]
+        OF[Order Filled] -->|send_order_filled| TG7[📱 📈 Order FILLED]
+        OFAIL[Order Failed] -->|send_order_failed| TG8[📱 ⚠️ Order FAILED]
+        PS[Position Sync] -->|send_position_summary| TG9[📱 📊 Position Summary]
+        HC[Health Check] -->|send_health| TG10[📱 💚 Engine Status]
+        ERR[Engine Error] -->|send_error| TG11[📱 🚨 Error Alert]
+    end
+    
+    style PythonLayer fill:#e3f2fd,stroke:#1565c0,color:#000
+    style RustLayer fill:#fff3e0,stroke:#e65100,color:#000
+```
+
 ## Notification Types
 
-### Python Layer (agent analysis)
+### Python Layer — Analysis Signal
 
-When TradingAgents completes an analysis, you receive:
+When TradingAgents completes an analysis, you receive a detailed signal card:
 
 ```
 🤖 TradingAgents Signal
@@ -29,16 +54,31 @@ Thesis:
 NVDA shows strong momentum with...
 ```
 
-### Rust Layer (execution)
+### Rust Layer — Execution Events
 
-When the execution engine processes a decision:
+```mermaid
+flowchart LR
+    subgraph TG["📱 Telegram Messages"]
+        M1["✅ Risk Check PASSED<br/>Ticker: NVDA"]
+        M2["❌ Risk Check REJECTED<br/>Ticker: AAPL<br/>Reason: Duplicate position"]
+        M3["📈 Order FILLED<br/>Ticket: #12345<br/>Fill: $124.50"]
+        M4["⚠️ Order FAILED<br/>Error: Insufficient margin"]
+        M5["📊 Position Summary<br/>2 positions | $12.5K"]
+        M6["💚 Engine reconnected"]
+        M7["🚨 Connection lost"]
+    end
+    
+    style TG fill:#f3e5f5,stroke:#6a1b9a,color:#000
+```
 
+**Risk Approved:**
 ```
 ✅ Risk Check PASSED
 ━━━━━━━━━━━━━━━━━━
 Ticker: NVDA
 ```
 
+**Risk Rejected:**
 ```
 ❌ Risk Check REJECTED
 ━━━━━━━━━━━━━━━━━━
@@ -46,6 +86,7 @@ Ticker: AAPL
 Reason: Position already open for AAPL
 ```
 
+**Order Filled:**
 ```
 📈 Order FILLED
 ━━━━━━━━━━━━━━━━━━
@@ -55,6 +96,7 @@ Ticket: #12345678
 Fill Price: 124.48
 ```
 
+**Order Failed:**
 ```
 ⚠️ Order FAILED
 ━━━━━━━━━━━━━━━━━━
@@ -62,8 +104,9 @@ Ticker: NVDA
 Error: Insufficient margin
 ```
 
-### Status Updates
+### Status & Health
 
+**Position Summary (every hour):**
 ```
 📊 Position Summary
 ━━━━━━━━━━━━━━━━━━
@@ -73,6 +116,7 @@ Balance: 10000.00
 Exposure: 2500.00
 ```
 
+**Health Alert:**
 ```
 💚 Engine Health
 ━━━━━━━━━━━━━━━━━━

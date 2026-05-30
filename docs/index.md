@@ -4,27 +4,68 @@
 
 ## Overview
 
-TradingAgents orchestrates a team of AI-powered analyst agents that research, debate, and produce trading decisions. The pipeline flows through:
+TradingAgents orchestrates a team of AI-powered analyst agents that research, debate, and produce trading decisions.
 
-1. **Analyst Team** — Market, News, Sentiment, and Fundamental analysts gather data
-2. **Research Team** — Bull & Bear researchers debate the investment thesis
-3. **Risk Management** — Conservative, Neutral, and Aggressive debaters evaluate risk
-4. **Trader Agent** — Produces a concrete transaction proposal
-5. **Portfolio Manager** — Final rating and execution plan
-
-## Pipeline
-
+```mermaid
+flowchart LR
+    subgraph Python["🐍 Python Layer"]
+        TA[TradingAgents<br/>Multi-Agent Pipeline] -->|JSON File| JS[(State Log)]
+    end
+    
+    subgraph Rust["🦀 Rust Layer"]
+        JS --> WE[Watcher Engine]
+        WE --> RM[Risk Manager]
+        RM --> OC[MT5 Connector]
+    end
+    
+    subgraph MT5["💹 MetaTrader 5"]
+        OC -->|JSON-RPC| MT[MT5 Terminal]
+        MT -->|MQL EA| TG1[📱 Telegram]
+    end
+    
+    TA -.->|HTTP| TG2[📱 Telegram]
+    WE -.->|HTTP| TG2
+    
+    style Python fill:#e3f2fd,stroke:#1565c0
+    style Rust fill:#fff3e0,stroke:#e65100
+    style MT5 fill:#e8f5e9,stroke:#2e7d32
 ```
-┌──────────────┐     JSON     ┌──────────────────┐   JSON-RPC   ┌─────────┐
-│ TradingAgents │────────────►│ mt5-execution-    │────────────►│   MT5   │
-│   (Python)    │  (file)     │ engine (Rust)     │             │ (Win)   │
-└──────┬───────┘              └────────┬─────────┘             └────┬────┘
-       │                              │                           │
-       │ Telegram                     │ Telegram                  │ Telegram
-       ▼                              ▼                           ▼
-┌──────────────────────────────────────────────────────────────────────┐
-│                         Telegram Bot                                 │
-└──────────────────────────────────────────────────────────────────────┘
+
+## Pipeline Flow
+
+```mermaid
+flowchart TB
+    subgraph Analysis["🔬 Analysis Phase"]
+        A1[📈 Market Analyst] --> D[🤖 AI Team Debate]
+        A2[📰 News Analyst] --> D
+        A3[💬 Social Analyst] --> D
+        A4[📋 Fundamentals Analyst] --> D
+    end
+    
+    subgraph Research["📝 Research Phase"]
+        D --> BULL[🐂 Bull Case]
+        D --> BEAR[🐻 Bear Case]
+        BULL --> PM[Portfolio Manager]
+        BEAR --> PM
+    end
+    
+    subgraph Execution["⚡ Execution Phase"]
+        PM --> DECISION{Decision}
+        DECISION -->|Buy/Overweight| TRADE[📈 Execute Trade]
+        DECISION -->|Hold| SKIP[⏭️ Skip]
+        DECISION -->|Underweight/Sell| TRADE2[📉 Reduce/Exit]
+    end
+    
+    subgraph Notify["🔔 Notification Phase"]
+        TRADE --> TG[📱 Telegram Alert]
+        SKIP --> TG
+        TRADE2 --> TG
+    end
+    
+    style Analysis fill:#e3f2fd
+    style Research fill:#f3e5f5
+    style Execution fill:#e8f5e9
+    style Notify fill:#fce4ec
 ```
 
 ## Features
@@ -54,11 +95,13 @@ python main.py run NVDA
 python main.py schedule --tickers NVDA,AAPL,SPY
 ```
 
-## Architecture
-
-The system consists of two main components:
+## Components
 
 | Component | Language | Purpose |
 |-----------|----------|---------|
 | **TradingAgents** | Python | LLM-powered multi-agent analysis pipeline |
 | **mt5-execution-engine** | Rust | Real-time decision watcher, risk manager, MT5 bridge |
+
+---
+
+*Not a developer? Check the [For Non-Technical Users](for-non-technical.md) page.*
