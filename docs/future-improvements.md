@@ -4,11 +4,14 @@ Ide dan roadmap untuk pengembangan JatayuCore selanjutnya.
 
 ## Broker & Execution
 
-### ✅ Alpaca Integration (Next Up)
-- [ ] Implement `AlpacaBroker` — place market/limit orders via Alpaca REST API
-- [ ] Paper trading mode (free, real market data, no real money)
-- [ ] Position tracking & portfolio sync
-- [ ] Auto-execution based on rating: Buy/Overweight → market order
+### ✅ Alpaca Integration (Done)
+- [x] Implement `AlpacaBroker` — market orders via Alpaca REST API
+- [x] Paper trading mode (free, real market data, no real money)
+- [x] Position tracking & portfolio sync
+- [x] Auto-execution: Buy/Overweight → market order, Sell/Underweight → close
+- [x] Portfolio-aware sizing (% equity → qty, fallback 1%)
+- [x] Duplicate position guard
+- [x] Telegram notification on every execution event
 
 ### 🔜 Windows + MT5 Execution
 - [ ] WSL2 setup guide for Windows 24/7 operation

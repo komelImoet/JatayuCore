@@ -1,52 +1,31 @@
 <p align="center">
-  <img src="assets/TauricResearch.png" style="width: 60%; height: auto;">
+  <img src="assets/jatayucore.svg" alt="JatayuCore" width="480">
 </p>
 
-<div align="center" style="line-height: 1;">
-  <a href="https://arxiv.org/abs/2412.20138" target="_blank"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2412.20138-B31B1B?logo=arxiv"/></a>
-  <a href="https://discord.com/invite/hk9PGKShPK" target="_blank"><img alt="Discord" src="https://img.shields.io/badge/Discord-TradingResearch-7289da?logo=discord&logoColor=white&color=7289da"/></a>
-  <a href="./assets/wechat.png" target="_blank"><img alt="WeChat" src="https://img.shields.io/badge/WeChat-TauricResearch-brightgreen?logo=wechat&logoColor=white"/></a>
-  <a href="https://x.com/TauricResearch" target="_blank"><img alt="X Follow" src="https://img.shields.io/badge/X-TauricResearch-white?logo=x&logoColor=white"/></a>
+<h2 align="center">
+  Multi-Agent AI Trading Framework
   <br>
-  <a href="https://github.com/TauricResearch/" target="_blank"><img alt="Community" src="https://img.shields.io/badge/Join_GitHub_Community-TauricResearch-14C290?logo=discourse"/></a>
-</div>
+  <sub>Filosofi Elang, Presisi Mesin</sub>
+</h2>
 
-<div align="center">
-  <!-- Keep these links. Translations will automatically update with the README. -->
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=de">Deutsch</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=es">Español</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=fr">français</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=ja">日本語</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=ko">한국어</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=pt">Português</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=ru">Русский</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=zh">中文</a>
-</div>
+<p align="center">
+  <a href="https://github.com/komelImoet/JatayuCore"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-JatayuCore-1A237E?logo=github"/></a>
+  <a href="https://komelimoet.github.io/JatayuCore/"><img alt="Docs" src="https://img.shields.io/badge/Docs-mkdocs--material-FF6F00"/></a>
+  <a href="https://arxiv.org/abs/2412.20138"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2412.20138-B31B1B?logo=arxiv"/></a>
+</p>
 
----
-
-# JatayuCore 🦅
-
-**Multi-Agent AI Trading Framework** — Filosofi Elang, Presisi Mesin.
-
-> Forked from [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents) — added Telegram notifier, scheduler, DeepSeek integration, and broker execution.
+> Forked from [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents) — extended with Telegram notifier, scheduler, DeepSeek, Alpaca broker, and background automation.
 
 ## Features
 - 🧠 **7 AI Agents** — Analysts, Researchers, Risk Manager, Trader, Portfolio Manager
-- 📱 **Telegram Alerts** — Real-time signal, execution, error, and summary notifications
-- ⏰ **Auto Scheduler** — Daily analysis runs via built-in daemon
-- ⚡ **Auto Execution** — Place orders via Alpaca broker API
+- ⚡ **Auto Execution** — Buy/Sell via Alpaca (paper or live)
+- 🛑 **Stop Loss Guard** — Auto close position at 5% loss
+- 📊 **Position Summary** — Hourly P&L report to Telegram
+- 💰 **Daily P&L** — Rekap portfolio tiap hari
+- 💚 **Heartbeat** — "Saya masih hidup" setiap 2 jam
+- 📱 **Telegram Alerts** — Signal, execution, SL, all in real-time
+- ⏰ **Auto Scheduler** — Daily runs with daemon mode, skips weekends
 - 🐳 **Docker Ready** — One-command deployment
-
-<div align="center">
-<a href="https://www.star-history.com/#TauricResearch/TradingAgents&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=TauricResearch/TradingAgents&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=TauricResearch/TradingAgents&type=Date" />
-   <img alt="TradingAgents Star History" src="https://api.star-history.com/svg?repos=TauricResearch/TradingAgents&type=Date" style="width: 80%; height: auto;" />
- </picture>
-</a>
-</div>
 
 > 🎉 **TradingAgents** officially released! We have received numerous inquiries about the work, and we would like to express our thanks for the enthusiasm in our community.
 >

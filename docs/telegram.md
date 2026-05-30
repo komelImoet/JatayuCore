@@ -1,127 +1,154 @@
 # Telegram Notifications
 
-JatayuCore sends real-time Telegram notifications at every stage of the trading pipeline.
+JatayuCore sends Telegram notifications at every stage — from analysis signals to execution events to background monitoring.
 
-## How Notifications Flow
+## All Notification Types
 
 ```mermaid
 flowchart TB
-    subgraph PythonLayer["🐍 JatayuCore (Python)"]
-        A[Analysis Complete] -->|send_decision| TG1[📱 Analysis Signal]
-        E[Error Occurs] -->|send_error| TG2[📱 Error Alert]
+    subgraph Analysis["🧠 Analysis"]
+        S[📊 Signal Card<br/>Rating + Entry + Thesis]
     end
-    
-    subgraph RustLayer["🦀 Execution Engine (Rust)"]
-        D[Decision Received] -->|send_decision| TG3[📱 Decision Card]
-        RK[Risk Check] -->|send_risk_decision| TG4{Approved?}
-        TG4 -->|Yes| TG5[📱 ✅ Risk PASSED]
-        TG4 -->|No| TG6[📱 ❌ Risk REJECTED]
-        OF[Order Filled] -->|send_order_filled| TG7[📱 📈 Order FILLED]
-        OFAIL[Order Failed] -->|send_order_failed| TG8[📱 ⚠️ Order FAILED]
-        PS[Position Sync] -->|send_position_summary| TG9[📱 📊 Position Summary]
-        HC[Health Check] -->|send_health| TG10[📱 💚 Engine Status]
-        ERR[Engine Error] -->|send_error| TG11[📱 🚨 Error Alert]
+
+    subgraph Execution["💹 Execution"]
+        OP[🟢 Order Placed<br/>Side + Qty + Order #]
+        PC[🔴 Position Closed<br/>Ticker + Reason]
+        SK[⚠️ Skip<br/>Already have position]
+        ER[🚨 Order Failed<br/>Error detail]
     end
-    
-    style PythonLayer fill:#e3f2fd,stroke:#1565c0,color:#000
-    style RustLayer fill:#fff3e0,stroke:#e65100,color:#000
+
+    subgraph Monitor["📡 Background"]
+        SL[🚨 Stop Loss Triggered<br/>Entry + Current + Loss %]
+        PS[📊 Position Summary<br/>Per position P&L]
+        DR[💰 Daily P&L Report<br/>Equity + Cash]
+        HB[💚 Heartbeat<br/>Status + Equity]
+    end
+
+    subgraph Scheduler["⏰ Scheduler"]
+        ST[💚 Scheduler started]
+        DS[📊 Starting daily run<br/>N tickers]
+        DC[✅ Daily run completed]
+        SP[💚 Scheduler stopped]
+        ERR[🚨 Ticker error]
+    end
+
+    style Analysis fill:#e3f2fd
+    style Execution fill:#e8f5e9
+    style Monitor fill:#fff3e0
+    style Scheduler fill:#f3e5f5
 ```
 
-## Notification Types
+## Signal Card
 
-### Python Layer — Analysis Signal
-
-When JatayuCore completes an analysis, you receive a detailed signal card:
+Setelah analysis selesai, lo dapet kartu sinyal kayak gini:
 
 ```
 🤖 JatayuCore Signal
 ━━━━━━━━━━━━━━━━━━
 🟢 Rating: Buy
 Ticker: NVDA
-Date: 2024-05-10
+Date: 2026-05-30
 Action: Buy
-Entry: 124.50
-Stop Loss: 118.27
-Price Target: 150.00
+Entry: $124.50
+Stop Loss: $118.27
+Price Target: $150.00
 Sizing: 5% of portfolio
 Horizon: 3-6 months
 
 Summary:
 Buy NVDA at market with 5% position size.
-Set stop-loss at $118.27 (-5%) and take-profit at $150.00 (+20%).
+Set stop-loss at $118.27 (-5%).
 
 Thesis:
 NVDA shows strong momentum with...
 ```
 
-### Rust Layer — Execution Events
+## Execution Events
 
-```mermaid
-flowchart LR
-    subgraph TG["📱 Telegram Messages"]
-        M1["✅ Risk Check PASSED<br/>Ticker: NVDA"]
-        M2["❌ Risk Check REJECTED<br/>Ticker: AAPL<br/>Reason: Duplicate position"]
-        M3["📈 Order FILLED<br/>Ticket: #12345<br/>Fill: $124.50"]
-        M4["⚠️ Order FAILED<br/>Error: Insufficient margin"]
-        M5["📊 Position Summary<br/>2 positions | $12.5K"]
-        M6["💚 Engine reconnected"]
-        M7["🚨 Connection lost"]
-    end
-    
-    style TG fill:#f3e5f5,stroke:#6a1b9a,color:#000
+**Order Placed:**
 ```
-
-**Risk Approved:**
-```
-✅ Risk Check PASSED
+🟢 Alpaca Order Placed
 ━━━━━━━━━━━━━━━━━━
-Ticker: NVDA
+Side: BUY
+Ticker: AAPL
+Qty: 10
+Order: #12345678
 ```
 
-**Risk Rejected:**
+**Position Closed:**
 ```
-❌ Risk Check REJECTED
+🔴 Alpaca Position Closed
 ━━━━━━━━━━━━━━━━━━
 Ticker: AAPL
-Reason: Position already open for AAPL
+Reason: Sell signal
 ```
 
-**Order Filled:**
+**Skip (duplicate):**
 ```
-📈 Order FILLED
+⚠️ Alpaca Skip
 ━━━━━━━━━━━━━━━━━━
-Ticker: NVDA
-Direction: Buy
-Ticket: #12345678
-Fill Price: 124.48
+Ticker: AAPL
+Reason: Already have position
 ```
 
 **Order Failed:**
 ```
-⚠️ Order FAILED
+🚨 JatayuCore Error
 ━━━━━━━━━━━━━━━━━━
-Ticker: NVDA
-Error: Insufficient margin
+Ticker: AAPL
+Error: Order failed: insufficient buying power
 ```
 
-### Status & Health
+## Monitor Events
+
+**Stop Loss Triggered:**
+```
+🚨 Stop Loss Triggered
+━━━━━━━━━━━━━━━━━━
+Ticker: NVDA
+Entry: $124.50
+Current: $118.27
+Loss: -5.0%
+```
 
 **Position Summary (every hour):**
 ```
 📊 Position Summary
 ━━━━━━━━━━━━━━━━━━
 Open Positions: 2
-Equity: 12500.00
-Balance: 10000.00
-Exposure: 2500.00
+🟢 AAPL: 10× @ $150.20 | P&L +$45.00
+🟢 NVDA: 5× @ $124.50 | P&L -$12.30
 ```
 
-**Health Alert:**
+**Daily P&L (once per day):**
 ```
-💚 Engine Health
+💰 Daily P&L Report
 ━━━━━━━━━━━━━━━━━━
-Status: MT5 reconnected
+Date: 2026-05-30
+Equity: $10,500.00
+Cash: $5,200.00
+Buying Power: $15,700.00
 ```
+
+**Heartbeat (every 2 hours):**
+```
+💚 JatayuCore Heartbeat
+━━━━━━━━━━━━━━━━━━
+Status: Running
+Equity: $10,500.00
+Cash: $5,200.00
+```
+
+## Scheduler Events
+
+| Event | Message |
+|-------|---------|
+| Start | 💚 Scheduler started |
+| Daily Start | 📊 Starting daily run for 3 tickers |
+| Ticker Result | Full signal card |
+| Ticker Error | 🚨 Error detail |
+| Daily Done | ✅ Daily run completed: 3 tickers processed |
+| Stop | 💚 Scheduler stopped |
 
 ## Configuration
 
@@ -132,13 +159,6 @@ TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklmNOPqrstUVwxyz
 TELEGRAM_CHAT_ID=123456789
 ```
 
-## Bot Token Setup
-
-1. Open Telegram and search for [@BotFather](https://t.me/botfather)
-2. Send `/newbot` and follow instructions
-3. Copy the token
-4. Find your chat ID by messaging [@userinfobot](https://t.me/userinfobot)
-
 ## Disabling Notifications
 
-Leave `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` empty in `.env` to disable all Telegram notifications.
+Leave both vars empty in `.env` to disable all Telegram notifications.

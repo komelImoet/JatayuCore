@@ -37,6 +37,7 @@ nav:
     - Configuration: configuration.md
   - Features:
     - Telegram Notifications: telegram.md
+    - Broker (Alpaca): broker.md
     - Scheduler: scheduler.md
     - MT5 Execution Engine: mt5-engine.md
   - Deployment:

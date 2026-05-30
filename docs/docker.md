@@ -40,6 +40,12 @@ TELEGRAM_CHAT_ID=your_chat_id
 
 # LLM Provider
 OPENAI_API_KEY=sk-...
+# or
+DEEPSEEK_API_KEY=sk-...
+
+# Alpaca Broker (paper)
+ALPACA_API_KEY=your_paper_key
+ALPACA_SECRET_KEY=your_paper_secret
 
 # Scheduler tickers (used by docker-compose)
 TICKERS=AAPL,MSFT,GOOGL

@@ -38,9 +38,29 @@ python main.py schedule
 # Custom tickers and time
 python main.py schedule --tickers AAPL,MSFT,GOOGL --hour 9 --minute 30
 
+# Run as background daemon (Unix only)
+python main.py schedule -D --tickers AAPL,NVDA,MSFT
+
 # With Docker
 docker compose up -d jatayucore
 ```
+
+## Features
+
+### Weekend Skip
+Scheduler otomatis skip kalo hari Sabtu/Minggu — gak buang-buang API calls.
+
+### Daemon Mode
+`-D` flag fork proses ke background. PID baru, stdin/stdout/stderr nutup. Cocok buat di VPS pake `nohup` atau `systemd`.
+
+### Background Monitor
+Bersamaan scheduler jalan, **PositionMonitor** aktif di thread terpisah:
+| Monitor | Interval | Fungsi |
+|---------|----------|--------|
+| Stop Loss | 60 detik | Cek harga, auto close kalo turun 5% |
+| Position Summary | 1 jam | Kirim P&L tiap posisi ke Telegram |
+| Heartbeat | 2 jam | Kirim "masih hidup" + equity |
+| Daily P&L | 1x/hari | Rekap portfolio |
 
 ## Command Options
 
@@ -49,6 +69,7 @@ docker compose up -d jatayucore
 | `--tickers`, `-t` | `NVDA,AAPL,SPY` | Comma-separated stock symbols |
 | `--hour` | `8` | Hour to run (UTC, 0-23) |
 | `--minute` | `0` | Minute to run (0-59) |
+| `--daemon`, `-D` | `false` | Fork ke background |
 
 ## What Happens Each Run
 

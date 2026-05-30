@@ -14,6 +14,10 @@ GOOGLE_API_KEY=...
 # === Telegram Notifications ===
 TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklmNOPqrstUVwxyz
 TELEGRAM_CHAT_ID=123456789
+
+# === Alpaca Broker (paper by default) ===
+ALPACA_API_KEY=your_paper_api_key
+ALPACA_SECRET_KEY=your_paper_secret_key
 ```
 
 ## JatayuCore Configuration
@@ -111,4 +115,5 @@ Options:
   --tickers, -t STRING    Comma-separated tickers (default: NVDA,AAPL,SPY)
   --hour INT              Run hour UTC (default: 8)
   --minute INT            Run minute UTC (default: 0)
+  --daemon, -D            Fork to background (Unix only)
 ```

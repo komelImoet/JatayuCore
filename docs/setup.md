@@ -3,9 +3,9 @@
 ## Prerequisites
 
 - Python 3.10+
-- Rust toolchain (for mt5-execution-engine)
-- MetaTrader 5 (Windows, for live execution)
+- [uv](https://docs.astral.sh/uv/) or pip
 - Telegram Bot Token (from [@BotFather](https://t.me/botfather))
+- Alpaca account ([paper](https://app.alpaca.markets) for testing)
 
 ## Python Setup
 
@@ -14,75 +14,83 @@
 git clone https://github.com/komelImoet/JatayuCore.git
 cd JatayuCore
 
-# Create virtual environment
+# Install with uv (recommended)
+uv sync
+
+# Or with pip
 python -m venv .venv
 source .venv/bin/activate
-
-# Install the package
 pip install -e .
-```
-
-### LLM Provider
-
-Set up at least one LLM provider in `.env`:
-
-```bash
-# OpenAI
-OPENAI_API_KEY=sk-...
-
-# Or DeepSeek
-DEEPSEEK_API_KEY=sk-...
-
-# Or Anthropic
-ANTHROPIC_API_KEY=sk-...
-
-# Or Google Gemini
-GOOGLE_API_KEY=...
-```
-
-## Rust Engine Setup
-
-```bash
-cd mt5-execution-engine
-
-# Build
-cargo build --release
-
-# Run (dry-run mode)
-./target/release/mt5-execution-engine --dry-run
-
-# Run with custom config
-./target/release/mt5-execution-engine --config /path/to/config.toml
 ```
 
 ## Telegram Bot Setup
 
-1. Create a bot with [@BotFather](https://t.me/botfather)
-2. Get your bot token
-3. Get your chat ID (message @userinfobot)
-4. Add to `.env`:
+1. Open [@BotFather](https://t.me/botfather) in Telegram
+2. Send `/newbot` and follow instructions
+3. Copy the bot token
+4. Get your chat ID from [@userinfobot](https://t.me/userinfobot)
+5. Add to `.env`:
 
 ```bash
 TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklmNOPqrstUVwxyz
 TELEGRAM_CHAT_ID=123456789
 ```
 
-## Docker Setup
+## Alpaca Broker Setup
+
+1. Register at [alpaca.markets](https://alpaca.markets) (free, 5 minutes)
+2. Switch to **Paper** trading (top-right toggle in web app)
+3. Go to API Keys section → **Generate Key**
+4. Add to `.env`:
 
 ```bash
-# Full stack
-docker compose up -d tradingagents mt5-engine
+ALPACA_API_KEY=PK1234567890ABCDEFGH
+ALPACA_SECRET_KEY=sk1234567890abcdefghijklmnopqrstuvwxyz
+```
 
-# With Ollama (local LLM)
-docker compose --profile ollama up -d
+## LLM Provider
+
+Set at least one LLM provider in `.env`:
+
+```bash
+# DeepSeek (cheapest, recommended)
+DEEPSEEK_API_KEY=sk-...
+
+# Or OpenAI
+OPENAI_API_KEY=sk-...
 ```
 
 ## Verify Installation
 
 ```bash
-# Run a single analysis
-python main.py run NVDA --date 2024-05-10
+# Single analysis (no trade, just signal)
+uv run python main.py run NVDA --date 2025-05-30
 
-# Expected output:
-# Buy (or one of Buy/Overweight/Hold/Underweight/Sell)
+# Expected: Buy / Overweight / Hold / Underweight / Sell
+```
+
+## Docker Setup
+
+```bash
+# Copy config
+cp .env.example .env
+# Edit .env with your API keys
+
+# Run scheduler
+docker compose up -d jatayucore
+```
+
+## Scheduler (Background)
+
+```bash
+# Run once (foreground)
+uv run python main.py schedule --tickers AAPL,NVDA,MSFT
+
+# Run as daemon (background)
+uv run python main.py schedule -D --tickers AAPL,NVDA,MSFT
+
+# Or with screen
+screen -S jatayu
+uv run python main.py schedule --tickers AAPL,NVDA,MSFT
+# Ctrl+A D to detach, screen -r jatayu to reattach
 ```
