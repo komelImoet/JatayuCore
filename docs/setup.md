@@ -11,8 +11,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/komelImoet/TradingAgents.git
-cd TradingAgents
+git clone https://github.com/komelImoet/JatayuCore.git
+cd JatayuCore
 
 # Create virtual environment
 python -m venv .venv

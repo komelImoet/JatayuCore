@@ -25,14 +25,18 @@
 
 ---
 
-# TradingAgents: Multi-Agents LLM Financial Trading Framework
+# JatayuCore 🦅
 
-## News
-- [2026-04] **TradingAgents v0.2.4** released with structured-output agents (Research Manager, Trader, Portfolio Manager), LangGraph checkpoint resume, persistent decision log, DeepSeek/Qwen/GLM/Azure provider support, Docker, and a Windows UTF-8 encoding fix. See [CHANGELOG.md](CHANGELOG.md) for the full list.
-- [2026-03] **TradingAgents v0.2.3** released with multi-language support, GPT-5.4 family models, unified model catalog, backtesting date fidelity, and proxy support.
-- [2026-03] **TradingAgents v0.2.2** released with GPT-5.4/Gemini 3.1/Claude 4.6 model coverage, five-tier rating scale, OpenAI Responses API, Anthropic effort control, and cross-platform stability.
-- [2026-02] **TradingAgents v0.2.0** released with multi-provider LLM support (GPT-5.x, Gemini 3.x, Claude 4.x, Grok 4.x) and improved system architecture.
-- [2026-01] **Trading-R1** [Technical Report](https://arxiv.org/abs/2509.11420) released, with [Terminal](https://github.com/TauricResearch/Trading-R1) expected to land soon.
+**Multi-Agent AI Trading Framework** — Filosofi Elang, Presisi Mesin.
+
+> Forked from [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents) — added Telegram notifier, scheduler, DeepSeek integration, and broker execution.
+
+## Features
+- 🧠 **7 AI Agents** — Analysts, Researchers, Risk Manager, Trader, Portfolio Manager
+- 📱 **Telegram Alerts** — Real-time signal, execution, error, and summary notifications
+- ⏰ **Auto Scheduler** — Daily analysis runs via built-in daemon
+- ⚡ **Auto Execution** — Place orders via Alpaca broker API
+- 🐳 **Docker Ready** — One-command deployment
 
 <div align="center">
 <a href="https://www.star-history.com/#TauricResearch/TradingAgents&Date">
@@ -102,10 +106,10 @@ Our framework decomposes complex trading tasks into specialized roles. This ensu
 
 ### Installation
 
-Clone TradingAgents:
+Clone JatayuCore:
 ```bash
-git clone https://github.com/TauricResearch/TradingAgents.git
-cd TradingAgents
+git clone https://github.com/komelImoet/JatayuCore.git
+cd JatayuCore
 ```
 
 Create a virtual environment in any of your favorite environment managers:

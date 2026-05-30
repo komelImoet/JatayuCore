@@ -4,7 +4,7 @@ import sys
 from dotenv import load_dotenv
 
 from tradingagents.default_config import DEFAULT_CONFIG
-from tradingagents.graph.trading_graph import TradingAgentsGraph
+from tradingagents.graph.trading_graph import TradingAgentsGraph as JatayuCoreGraph
 from tradingagents.notifiers.telegram_notifier import TelegramNotifier
 from tradingagents.scheduler import TradingScheduler
 
@@ -31,7 +31,7 @@ def cmd_run(args: argparse.Namespace) -> None:
     notifier = TelegramNotifier()
     notifiers = [notifier] if notifier.enabled else []
 
-    ta = TradingAgentsGraph(
+    ta = JatayuCoreGraph(
         debug=not args.quiet,
         config=config,
         notifiers=notifiers,
@@ -56,7 +56,7 @@ def cmd_scheduler(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="TradingAgents")
+    parser = argparse.ArgumentParser(description="JatayuCore — Multi-Agent AI Trading Framework")
     sub = parser.add_subparsers(dest="command", required=True)
 
     # Single run

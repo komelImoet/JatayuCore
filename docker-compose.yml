@@ -1,5 +1,5 @@
 services:
-  tradingagents:
+  jatayucore:
     build: .
     env_file:
       - .env
@@ -31,7 +31,7 @@ services:
     profiles:
       - ollama
 
-  tradingagents-ollama:
+  jatayucore-ollama:
     build: .
     env_file:
       - .env

@@ -1,12 +1,12 @@
 # Telegram Notifications
 
-TradingAgents sends real-time Telegram notifications at every stage of the trading pipeline.
+JatayuCore sends real-time Telegram notifications at every stage of the trading pipeline.
 
 ## How Notifications Flow
 
 ```mermaid
 flowchart TB
-    subgraph PythonLayer["🐍 TradingAgents (Python)"]
+    subgraph PythonLayer["🐍 JatayuCore (Python)"]
         A[Analysis Complete] -->|send_decision| TG1[📱 Analysis Signal]
         E[Error Occurs] -->|send_error| TG2[📱 Error Alert]
     end
@@ -31,10 +31,10 @@ flowchart TB
 
 ### Python Layer — Analysis Signal
 
-When TradingAgents completes an analysis, you receive a detailed signal card:
+When JatayuCore completes an analysis, you receive a detailed signal card:
 
 ```
-🤖 TradingAgents Signal
+🤖 JatayuCore Signal
 ━━━━━━━━━━━━━━━━━━
 🟢 Rating: Buy
 Ticker: NVDA

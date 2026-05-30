@@ -1,8 +1,8 @@
-site_name: TradingAgents
-site_description: Multi-Agent LLM Financial Trading Framework with MT5 execution & Telegram alerts
-site_url: https://komelimoet.github.io/TradingAgents
-repo_url: https://github.com/komelImoet/TradingAgents
-repo_name: komelImoet/TradingAgents
+site_name: JatayuCore
+site_description: Multi-Agent AI Trading Framework — Filosofi Elang, Presisi Mesin
+site_url: https://komelimoet.github.io/JatayuCore
+repo_url: https://github.com/komelImoet/JatayuCore
+repo_name: komelImoet/JatayuCore
 
 theme:
   name: material
@@ -29,6 +29,7 @@ theme:
 
 nav:
   - Home: index.md
+  - Filosofi: philosophy.md
   - For Non-Technical Users: for-non-technical.md
   - Architecture: architecture.md
   - Getting Started:
@@ -64,4 +65,4 @@ extra_javascript:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/komelImoet/TradingAgents
+      link: https://github.com/komelImoet/JatayuCore

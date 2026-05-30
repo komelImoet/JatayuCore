@@ -15,9 +15,9 @@ flowchart TB
     
     subgraph DailyRun["📅 Daily Run"]
         RUN --> TG1[📱 Telegram: Starting run]
-        TG1 --> T1[Run TradingAgents<br/>for Ticker 1]
+        TG1 --> T1[Run JatayuCore<br/>for Ticker 1]
         T1 --> TG2[📱 Send result]
-        TG2 --> T2[Run TradingAgents<br/>for Ticker 2]
+        TG2 --> T2[Run JatayuCore<br/>for Ticker 2]
         T2 --> TG3[📱 Send result]
         TG3 --> TN[Run for all tickers...]
         TN --> DONE[📱 Daily run completed]
@@ -39,7 +39,7 @@ python main.py schedule
 python main.py schedule --tickers AAPL,MSFT,GOOGL --hour 9 --minute 30
 
 # With Docker
-docker compose up -d tradingagents
+docker compose up -d jatayucore
 ```
 
 ## Command Options
@@ -55,7 +55,7 @@ docker compose up -d tradingagents
 ```mermaid
 sequenceDiagram
     participant S as Scheduler
-    participant TA as TradingAgents
+    participant TA as JatayuCore
     participant TG as Telegram
     
     Note over S: Last run was yesterday

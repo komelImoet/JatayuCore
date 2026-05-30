@@ -35,8 +35,8 @@ from cli.stats_handler import StatsCallbackHandler
 console = Console()
 
 app = typer.Typer(
-    name="TradingAgents",
-    help="TradingAgents CLI: Multi-Agents LLM Financial Trading Framework",
+    name="JatayuCore",
+    help="JatayuCore CLI: Multi-Agent AI Trading Framework",
     add_completion=True,  # Enable shell completion
 )
 

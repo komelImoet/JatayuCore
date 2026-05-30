@@ -1,12 +1,12 @@
 # Docker Deployment
 
-Deploy the entire TradingAgents stack with Docker Compose.
+Deploy the entire JatayuCore stack with Docker Compose.
 
 ## Services
 
 | Service | Description | Based On |
 |---------|-------------|----------|
-| `tradingagents` | Python scheduler (daily runs) | `Dockerfile` (Python) |
+| `jatayucore` | Python scheduler (daily runs) | `Dockerfile` (Python) |
 | `mt5-engine` | Rust execution engine | `mt5-execution-engine/Dockerfile` |
 | `ollama` | Local LLM (optional) | `ollama/ollama` |
 
@@ -14,8 +14,8 @@ Deploy the entire TradingAgents stack with Docker Compose.
 
 ```bash
 # Clone and enter
-git clone https://github.com/komelImoet/TradingAgents.git
-cd TradingAgents
+git clone https://github.com/komelImoet/JatayuCore.git
+cd JatayuCore
 
 # Configure
 cp .env.example .env
@@ -25,7 +25,7 @@ cp .env.example .env
 docker compose up -d
 
 # View logs
-docker compose logs -f tradingagents
+docker compose logs -f jatayucore
 docker compose logs -f mt5-engine
 ```
 
@@ -49,7 +49,7 @@ TICKERS=AAPL,MSFT,GOOGL
 
 ```yaml
 services:
-  tradingagents:
+  jatayucore:
     build: .
     env_file: .env
     volumes:
@@ -83,7 +83,7 @@ docker compose --profile ollama up -d
 # Pull a model
 docker compose exec ollama ollama pull llama3
 
-# The tradingagents-ollama service will use it automatically
+# The jatayucore-ollama service will use it automatically
 ```
 
 ## Production Considerations

@@ -48,7 +48,7 @@ class TradingScheduler:
 
         for ticker in self.tickers:
             try:
-                logger.info("Running TradingAgents for %s on %s", ticker, today_str)
+                logger.info("Running JatayuCore for %s on %s", ticker, today_str)
 
                 ta = TradingAgentsGraph(
                     debug=False,

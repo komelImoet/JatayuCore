@@ -75,7 +75,7 @@ class TelegramNotifier:
         icon = rating_icon.get(rating, "⚪")
 
         lines = [
-            f"<b>TradingAgents Signal</b>",
+            f"<b>JatayuCore Signal</b>",
             f"━━━━━━━━━━━━━━━━━━",
             f"{icon} <b>Rating:</b> {rating}",
             f"<b>Ticker:</b> {ticker}",
@@ -104,7 +104,7 @@ class TelegramNotifier:
 
     def send_error(self, ticker: str, message: str) -> bool:
         return self._send(
-            f"<b>TradingAgents Error</b>\n"
+            f"<b>JatayuCore Error</b>\n"
             f"━━━━━━━━━━━━━━━━━━\n"
             f"<b>Ticker:</b> {ticker}\n"
             f"<b>Error:</b> {message}"

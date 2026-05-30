@@ -1,6 +1,6 @@
 # MT5 Execution Engine
 
-The `mt5-execution-engine` is a high-performance Rust bridge that monitors TradingAgents' JSON output and executes trades in MetaTrader 5.
+The `mt5-execution-engine` is a high-performance Rust bridge that monitors JatayuCore's JSON output and executes trades in MetaTrader 5.
 
 ## Architecture
 

@@ -1,10 +1,10 @@
 # For Non-Technical Users
 
-Welcome! This page explains what TradingAgents does in plain language — no coding knowledge needed.
+Welcome! This page explains what JatayuCore does in plain language — no coding knowledge needed.
 
 ## What Is This?
 
-TradingAgents is an **automated trading system** that uses Artificial Intelligence (AI) to analyze stocks and make trading decisions. Think of it as having a team of robot analysts working 24/7 to find trading opportunities.
+JatayuCore is an **automated trading system** that uses Artificial Intelligence (AI) to analyze stocks and make trading decisions. Think of it as having a team of robot analysts working 24/7 to find trading opportunities.
 
 ## How It Works (Simple Version)
 
@@ -82,7 +82,7 @@ Every decision gets one of these ratings:
 When a decision is made, you get a message like this in Telegram:
 
 ```
-🤖 TradingAgents Signal
+🤖 JatayuCore Signal
 ━━━━━━━━━━━━━━━━━━
 🟢 Rating: Buy
 Ticker: NVDA
@@ -114,7 +114,7 @@ Without writing code, you can configure:
 
 Great! Here's how to contribute ideas:
 
-1. **Open an Issue** → Go to `https://github.com/komelImoet/TradingAgents/issues` and click "New Issue"
+1. **Open an Issue** → Go to `https://github.com/komelImoet/JatayuCore/issues` and click "New Issue"
 2. **Tell us your idea** — Describe what you'd like to see added or changed
 3. **Tag it** — Use the `enhancement` or `feature-request` label
 
@@ -131,11 +131,11 @@ Want to see it in action? The fastest way is through Docker:
 
 ```bash
 # If you have Docker installed:
-docker compose up -d tradingagents
+docker compose up -d jatayucore
 ```
 
 Then just check your Telegram for the daily analysis results!
 
 ---
 
-*Need help? Open an issue at https://github.com/komelImoet/TradingAgents/issues*
+*Need help? Open an issue at https://github.com/komelImoet/JatayuCore/issues*

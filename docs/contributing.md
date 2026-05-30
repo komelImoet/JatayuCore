@@ -3,8 +3,8 @@
 ## Development Setup
 
 ```bash
-git clone https://github.com/komelImoet/TradingAgents.git
-cd TradingAgents
+git clone https://github.com/komelImoet/JatayuCore.git
+cd JatayuCore
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
@@ -38,9 +38,9 @@ cd mt5-execution-engine && cargo test
 ## Project Structure
 
 ```
-TradingAgents/
+JatayuCore/
 ├── main.py                         # CLI entry point
-├── tradingagents/
+├── jatayucore/                     # Core package
 │   ├── agents/                     # Agent definitions
 │   │   ├── analysts/               # Market, news, social, fundamentals
 │   │   ├── researchers/            # Bull/bear debate

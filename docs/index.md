@@ -1,107 +1,81 @@
-# TradingAgents
+# JatayuCore
 
-**Multi-Agent LLM Financial Trading Framework** with automated MetaTrader 5 execution and real-time Telegram notifications.
-
-## Overview
-
-TradingAgents orchestrates a team of AI-powered analyst agents that research, debate, and produce trading decisions.
-
-```mermaid
-flowchart LR
-    subgraph Python["🐍 Python Layer"]
-        TA[TradingAgents<br/>Multi-Agent Pipeline] -->|JSON File| JS[(State Log)]
-    end
-    
-    subgraph Rust["🦀 Rust Layer"]
-        JS --> WE[Watcher Engine]
-        WE --> RM[Risk Manager]
-        RM --> OC[MT5 Connector]
-    end
-    
-    subgraph MT5["💹 MetaTrader 5"]
-        OC -->|JSON-RPC| MT[MT5 Terminal]
-        MT -->|MQL EA| TG1[📱 Telegram]
-    end
-    
-    TA -.->|HTTP| TG2[📱 Telegram]
-    WE -.->|HTTP| TG2
-    
-    style Python fill:#e3f2fd,stroke:#1565c0
-    style Rust fill:#fff3e0,stroke:#e65100
-    style MT5 fill:#e8f5e9,stroke:#2e7d32
-```
-
-## Pipeline Flow
+**Multi-Agent AI Trading Framework** — Terinspirasi dari Jatayu, elang mitologis yang memiliki visi tajam, ketepatan, dan kesetiaan.
 
 ```mermaid
 flowchart TB
-    subgraph Analysis["🔬 Analysis Phase"]
-        A1[📈 Market Analyst] --> D[🤖 AI Team Debate]
-        A2[📰 News Analyst] --> D
-        A3[💬 Social Analyst] --> D
-        A4[📋 Fundamentals Analyst] --> D
+    subgraph Jatayu["🦅 JatayuCore"]
+        direction TB
+        V[👁️ Visi Tajam<br/>Multi-Agent AI] --> P[🎯 Ketepatan<br/>Risk Management]
+        P --> K[🪽 Kekuatan<br/>Eksekusi Otomatis]
+        K --> S[💪 Kesetiaan<br/>Telegram Setiap Saat]
     end
     
-    subgraph Research["📝 Research Phase"]
-        D --> BULL[🐂 Bull Case]
-        D --> BEAR[🐻 Bear Case]
-        BULL --> PM[Portfolio Manager]
-        BEAR --> PM
-    end
-    
-    subgraph Execution["⚡ Execution Phase"]
-        PM --> DECISION{Decision}
-        DECISION -->|Buy/Overweight| TRADE[📈 Execute Trade]
-        DECISION -->|Hold| SKIP[⏭️ Skip]
-        DECISION -->|Underweight/Sell| TRADE2[📉 Reduce/Exit]
-    end
-    
-    subgraph Notify["🔔 Notification Phase"]
-        TRADE --> TG[📱 Telegram Alert]
-        SKIP --> TG
-        TRADE2 --> TG
-    end
-    
-    style Analysis fill:#e3f2fd
-    style Research fill:#f3e5f5
-    style Execution fill:#e8f5e9
-    style Notify fill:#fce4ec
+    style Jatayu fill:#fff3e0,stroke:#e65100,color:#000
 ```
 
-## Features
+## Pipeline
 
-- **Multi-Agent AI Pipeline** — 7 specialized agents collaborate on each decision
-- **MetaTrader 5 Integration** — Automated order execution via Rust bridge
-- **Telegram Alerts** — Real-time notifications at every stage
-- **Scheduler** — Fully automated daily trading sessions
-- **Risk Management** — Configurable position sizing, exposure limits, stop-loss enforcement
-- **Docker Support** — Deploy the entire stack with Docker Compose
+```mermaid
+flowchart LR
+    subgraph Python["🐍 JatayuCore (Python)"]
+        TA[Jatayu Agent Pipeline<br/>Analis → Debat → Eksekusi]
+    end
+    
+    subgraph Storage["💾 Storage"]
+        JS[(JSON State Logs)]
+    end
+    
+    subgraph Telegram["📱 Telegram"]
+        TG[Bot Notifications<br/>Signal + Eksekusi + Error]
+    end
+    
+    TA -->|Simpan| JS
+    TA -->|Kirim| TG
+    JS -->|Baca| RE[Rust Engine]
+    RE -->|Execute| MT[MT5 / Alpaca]
+    RE -->|Kirim| TG
+    
+    style Python fill:#e3f2fd,stroke:#1565c0,color:#000
+    style Storage fill:#f5f5f5,stroke:#616161,color:#000
+    style Telegram fill:#f3e5f5,stroke:#6a1b9a,color:#000
+```
 
-## Quick Start
+## Filosofi Singkat
+
+Jatayu dalam kisah Ramayana adalah elang raksasa yang:
+- **Terbang tinggi** — melihat luas, tidak terjebak detail sempit
+- **Menyambar tepat** — tidak asal serang, ada kalkulasi
+- **Setia & gigih** — berjuang sampai akhir
+
+Sama seperti sistem ini: AI menganalisis dari semua sudut, risk manager memvalidasi, eksekusi otomatis, dan lo tinggal terima laporan di Telegram.
+
+## Fitur
+
+- **Multi-Agent AI** — 7 agen spesialis menganalisis pasar dari berbagai sudut
+- **Auto Eksekusi** — Order otomatis ke MT5 atau Alpaca
+- **Telegram Alert** — Real-time dari analysis sampe eksekusi
+- **Scheduler Harian** — Jalan otomatis tiap hari
+- **Risk Management** — Stop loss, exposure limit, rating filter
+- **Docker Siap** — Deploy pake `docker compose up`
+
+## Start Cepat
 
 ```bash
-# Clone the repo
-git clone https://github.com/komelImoet/TradingAgents.git
-cd TradingAgents
+git clone https://github.com/komelImoet/JatayuCore.git
+cd JatayuCore
 
-# Set up Telegram (optional)
-export TELEGRAM_BOT_TOKEN="your_bot_token"
-export TELEGRAM_CHAT_ID="your_chat_id"
+# Set Telegram
+export TELEGRAM_BOT_TOKEN="token_lo"
+export TELEGRAM_CHAT_ID="chat_id_lo"
 
-# Run single analysis
-python main.py run NVDA
+# Analisis saham
+python main.py run AAPL
 
-# Run scheduler (daily at 08:00 UTC)
-python main.py schedule --tickers NVDA,AAPL,SPY
+# Scheduler otomatis tiap hari
+python main.py schedule --tickers AAPL,NVDA,MSFT
 ```
-
-## Components
-
-| Component | Language | Purpose |
-|-----------|----------|---------|
-| **TradingAgents** | Python | LLM-powered multi-agent analysis pipeline |
-| **mt5-execution-engine** | Rust | Real-time decision watcher, risk manager, MT5 bridge |
 
 ---
 
-*Not a developer? Check the [For Non-Technical Users](for-non-technical.md) page.*
+*"Terbang tinggi, sambar tepat, pantang menyerah."* — JatayuCore

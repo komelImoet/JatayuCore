@@ -8,7 +8,7 @@ flowchart TB
         S[Daily Cron<br/>08:00 UTC]
     end
     
-    subgraph TA["🐍 TradingAgents (Python)"]
+    subgraph TA["🐍 JatayuCore (Python)"]
         direction TB
         A1[Market Analyst] --> AD[Agent Debate]
         A2[News Analyst] --> AD
@@ -68,7 +68,7 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant S as Scheduler
-    participant TA as TradingAgents
+    participant TA as JatayuCore
     participant A as AI Agents
     participant JS as JSON Log
     participant E as Rust Engine
@@ -115,7 +115,7 @@ sequenceDiagram
 
 ## Component Details
 
-### Python Layer (TradingAgents)
+### Python Layer (JatayuCore)
 
 The Python framework uses **LangGraph** to orchestrate a directed acyclic graph of agent nodes. Each agent is an LLM-powered node with access to specific tools (data vendors, analysis functions).
 
@@ -170,7 +170,7 @@ flowchart LR
 ## Data Flow
 
 1. **Scheduler** triggers daily analysis at configured time (default: 08:00 UTC)
-2. **TradingAgents** runs the pipeline for each ticker in the watchlist
+    2. **JatayuCore** runs the pipeline for each ticker in the watchlist
 3. **JSON state** is written to shared volume
 4. **Rust engine** detects new file via `inotify`
 5. **Risk validation** checks rating threshold, exposure limits, duplicate prevention

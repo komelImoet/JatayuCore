@@ -16,7 +16,7 @@ TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklmNOPqrstUVwxyz
 TELEGRAM_CHAT_ID=123456789
 ```
 
-## TradingAgents Configuration
+## JatayuCore Configuration
 
 The default configuration is defined in `tradingagents/default_config.py`:
 
@@ -58,7 +58,7 @@ Located in `mt5-execution-engine/config/default.toml`:
 
 ```toml
 [watcher]
-# Directory where TradingAgents writes JSON state logs
+# Directory where JatayuCore writes JSON state logs
 log_dir = "~/.tradingagents/logs"
 debounce_ms = 1000
 
