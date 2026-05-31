@@ -1,8 +1,15 @@
 import argparse
+import logging
 import os
 import sys
 
 from dotenv import load_dotenv
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(name)s] %(levelname)s %(message)s",
+    datefmt="%H:%M:%S",
+)
 
 from tradingagents.brokers.alpaca_broker import AlpacaBroker
 from tradingagents.default_config import DEFAULT_CONFIG
@@ -77,6 +84,7 @@ def cmd_scheduler(args: argparse.Namespace) -> None:
         tickers=tickers,
         config=config,
         interval_hours=args.interval,
+        broker=args.broker,
     )
     scheduler.start()
 
@@ -96,6 +104,7 @@ def main() -> None:
     sched_p = sub.add_parser("schedule", help="Run scheduler daemon")
     sched_p.add_argument("--tickers", "-t", help="Comma-separated tickers")
     sched_p.add_argument("--interval", type=int, default=3, help="Hours between runs (default: 3)")
+    sched_p.add_argument("--broker", choices=["alpaca", "mt5"], default="alpaca", help="Broker backend (default: alpaca)")
     sched_p.add_argument("--daemon", "-D", action="store_true", help="Fork to background")
     sched_p.set_defaults(func=cmd_scheduler)
 

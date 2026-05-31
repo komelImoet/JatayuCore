@@ -114,6 +114,21 @@ class AlpacaBroker:
     def get_positions(self) -> list:
         return self.client.get_all_positions()
 
+    def get_positions_normalized(self) -> list[dict]:
+        positions = self.get_positions()
+        result = []
+        for p in positions:
+            qty = float(p.qty)
+            result.append({
+                "symbol": p.symbol,
+                "qty": qty,
+                "avg_entry_price": float(p.avg_entry_price),
+                "current_price": float(p.current_price),
+                "unrealized_pl": float(p.unrealized_pl),
+                "side": "long" if qty > 0 else "short",
+            })
+        return result
+
     def positions_summary(self) -> str:
         return _positions_summary(self.get_positions())
 

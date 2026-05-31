@@ -72,17 +72,17 @@ class PositionMonitor:
 
     def _check_stop_loss(self):
         try:
-            positions = self.broker.get_positions()
+            positions = self.broker.get_positions_normalized()
         except Exception as e:
             logger.warning("PositionMonitor: cannot fetch positions: %s", e)
             return
 
         for p in positions:
-            ticker = p.symbol
-            qty = float(p.qty)
-            avg_entry = float(p.avg_entry_price)
-            current = float(p.current_price)
-            side = "long" if qty > 0 else "short"
+            ticker = p["symbol"]
+            qty = float(p["qty"])
+            avg_entry = float(p["avg_entry_price"])
+            current = float(p["current_price"])
+            side = p["side"]
 
             if side != "long":
                 continue
@@ -95,7 +95,7 @@ class PositionMonitor:
                     ticker, avg_entry, current, sl_price,
                 )
                 try:
-                    self.broker.client.close_position(ticker)
+                    self.broker.close_position(ticker)
                     journal = getattr(self.broker, "journal", None)
                     if journal:
                         journal.record_exit(ticker, current, reason="stop_loss")

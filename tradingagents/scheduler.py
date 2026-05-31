@@ -4,11 +4,18 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from tradingagents.brokers.alpaca_broker import AlpacaBroker
+from tradingagents.brokers.mt5_broker import MT5Broker
 from tradingagents.circuit_breaker import CircuitBreaker
 from tradingagents.graph.trading_graph import TradingAgentsGraph
 from tradingagents.monitor import PositionMonitor
 from tradingagents.notifiers.telegram_notifier import TelegramNotifier
 from tradingagents.default_config import DEFAULT_CONFIG
+
+
+_BROKER_MAP = {
+    "alpaca": AlpacaBroker,
+    "mt5": MT5Broker,
+}
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +31,7 @@ class TradingScheduler:
         tickers: list[str],
         config: Optional[dict] = None,
         interval_hours: int = 3,
+        broker: str = "alpaca",
     ):
         self.tickers = tickers
         self.config = config or DEFAULT_CONFIG.copy()
@@ -31,10 +39,19 @@ class TradingScheduler:
 
         self.circuit_breaker = CircuitBreaker()
         self.notifier = TelegramNotifier()
-        self.broker = AlpacaBroker(
-            notifier=self.notifier if self.notifier.enabled else None,
-            circuit_breaker=self.circuit_breaker,
-        )
+
+        broker_cls = _BROKER_MAP.get(broker, AlpacaBroker)
+        if broker_cls == MT5Broker:
+            self.broker = MT5Broker(
+                notifier=self.notifier if self.notifier.enabled else None,
+                circuit_breaker=self.circuit_breaker,
+            )
+        else:
+            self.broker = AlpacaBroker(
+                notifier=self.notifier if self.notifier.enabled else None,
+                circuit_breaker=self.circuit_breaker,
+            )
+
         self.monitor = PositionMonitor(
             broker=self.broker,
             notifier=self.notifier,
